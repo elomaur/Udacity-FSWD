@@ -80,7 +80,7 @@ def index():
   return render_template('pages/home.html')
 
 
-#  Venues Word
+#  Venues
 #  ----------------------------------------------------------------
 
 @app.route('/venues')
