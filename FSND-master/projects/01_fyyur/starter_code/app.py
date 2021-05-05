@@ -59,11 +59,11 @@ def index():
 @app.route('/venues')
 def venues():
   # TODO: replace with real venues data.
-  #       num_shows should be aggregated based on number of upcoming shows per venue.
+  # num_shows should be aggregated based on number of upcoming shows per venue.
 
   areas=[]
   def venues():
-    data= Venue.query.distinct(Venue.city,Venue.state).all():
+    data= Venue.query.all()
     for place in Venue.query.distinct(Venue.city,Venue.state).all():
       areas.append({
         'city':place.city,
@@ -73,7 +73,7 @@ def venues():
           'name': d.name
         }for d in data if d.city == place.city and d.state == place.state]
       })
-return render_template('pages/venues.html', areas=areas)
+    return render_template('pages/venues.html', areas=areas)
 
 
  # TODO: implement search on artists with partial string search. Ensure it is case-insensitive.
@@ -364,20 +364,20 @@ def edit_venue(venue_id):
   # venue record with ID <venue_id> using the new attributes
 
   @app.route('/venues/<int:venue_id>/edit', methods=['POST'])
-def edit_venue_submission(venue_id):
-  form=VenueForm(request.form)
-  venue=Venue.query.get(venue_id)
-  venue.name=request.form.get('name', '')
-  venue.city=request.form.get('city', '')
-  venue.state=request.form.get('state', '')
-  venue.address=request.form.get('address','')
-  venue.phone=request.form.get('phone','')
-  venue.image_link=request.form.get('image_link', '')
-  venue.genres=request.form.getlist('genres')
-  venue.facebook_link=request.form.get('facebook_link','')
-  venue.website=request.form.get('website','')
-  venue.seeking_talent=request.form.get('seeking_talent')
-  venue.seeking_description=request.form.get('seeking_description','')
+  def edit_venue_submission(venue_id):
+    form=VenueForm(request.form)
+    venue=Venue.query.get(venue_id)
+    venue.name=request.form.get('name', '')
+    venue.city=request.form.get('city', '')
+    venue.state=request.form.get('state', '')
+    venue.address=request.form.get('address','')
+    venue.phone=request.form.get('phone','')
+    venue.image_link=request.form.get('image_link', '')
+    venue.genres=request.form.getlist('genres')
+    venue.facebook_link=request.form.get('facebook_link','')
+    venue.website=request.form.get('website','')
+    venue.seeking_talent=request.form.get('seeking_talent')
+    venue.seeking_description=request.form.get('seeking_description','')
   
   if venue.seeking_talent=='No':
     venue.seeking_talent=False
@@ -386,7 +386,7 @@ def edit_venue_submission(venue_id):
 
   db.session.commit()
 
-   return redirect(url_for('show_venue', form=form, venue_id=venue_id))
+  return redirect(url_for('show_venue', form=form, venue_id=venue_id))
 
 
 #  Create Artist
@@ -428,7 +428,7 @@ def create_artist_submission():
     db.session.commit()
 
   # on successful db insert, flash success
-  flash('Artist ' + request.form['name'] + ' was successfully listed!')
+    flash('Artist ' + request.form['name'] + ' was successfully listed!')
   except ValueError as e:
     print(e)
     flash('An error occurred. The artist could not be listed.')
@@ -456,7 +456,7 @@ def create_artist_submission():
 @app.route('/shows')
 def shows():
     data= Show.query.order_by(Show.start_time)
-  return render_template('pages/shows.html', shows=data)
+    return render_template('pages/shows.html', shows=data)
 
 
   # renders form. do not touch.
@@ -484,7 +484,7 @@ def create_show_submission():
 
 
   # on successful db insert, flash success
-  flash('Show was successfully listed!')
+    flash('Show was successfully listed!')
   except Exception:
     error=True
     db.session.rollback()
@@ -496,7 +496,7 @@ def create_show_submission():
   # e.g., flash('An error occurred. Show could not be listed.')
   # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
 
-   if error:
+  if error:
     return render_template('/errors/500.html')
   else:
     return redirect(url_for('shows'))
